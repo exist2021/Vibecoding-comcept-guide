@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Studio Vibe Coding Guide - VibeBuilt Tech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFA726 0%, #FB8C00 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .brand-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+        }
+        .brand-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #6366f1;
+            margin-bottom: 5px;
+        }
+        .brand-name span {
+            color: #5b21b6;
+        }
+        .brand-url {
+            color: #6b7280;
+            font-size: 1em;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin: 30px 0 10px 0;
+            font-size: 2.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .map-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            min-height: 600px;
+        }
+        .nodes-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .node-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+        .group-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        .nodes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .node {
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+        .node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .node.active {
+            border-color: #495057;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .node.studio { background: #FFA726; color: white; }
+        .node.mode { background: #66BB6A; color: white; }
+        .node.ai { background: #AB47BC; color: white; }
+        .node.framework { background: #42A5F5; color: white; }
+        .node.firebase { background: #FF7043; color: white; }
+        .node.feature { background: #26C6DA; color: white; }
+        .node.admin { background: #EF5350; color: white; }
+        .node.client { background: #66BB6A; color: white; }
+        .node.key { background: #AB47BC; color: white; }
+        .node.security { background: #FF7043; color: white; }
+
+```
+    .info-panel {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        border: 2px solid #e9ecef;
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .info-panel.empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #868e96;
+        font-style: italic;
+    }
+    .info-title {
+        font-size: 1.6em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #212529;
+    }
+    .info-content {
+        line-height: 1.8;
+        color: #495057;
+    }
+    .info-content h3 {
+        margin-top: 15px;
+        margin-bottom: 8px;
+        color: #212529;
+    }
+    .info-content ul {
+        margin-left: 20px;
+        margin-top: 8px;
+    }
+    .info-content li {
+        margin-bottom: 6px;
+    }
+    .info-content code {
+        background: #e9ecef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+    }
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .badge.danger { background: #ffebee; color: #c62828; }
+    .badge.safe { background: #e8f5e9; color: #2e7d32; }
+    .badge.warning { background: #fff3e0; color: #ef6c00; }
+    .badge.info { background: #e3f2fd; color: #1565c0; }
+    
+    .footer {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 30px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    .footer-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    .footer-logo {
+        width: 50px;
+        height: 50px;
+    }
+    .footer-text {
+        text-align: left;
+    }
+    .footer-name {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #6366f1;
+    }
+    .footer-tagline {
+        color: #6b7280;
+        font-size: 0.9em;
+    }
+    .footer-links {
+        color: #6b7280;
+        margin-bottom: 10px;
+    }
+    .footer-links a {
+        color: #6366f1;
+        text-decoration: none;
+    }
+    .footer-copyright {
+        color: #9ca3af;
+        font-size: 0.85em;
+        padding-top: 15px;
+        border-top: 1px solid #e5e7eb;
+    }
+    
+    @media (max-width: 968px) {
+        .map-container {
+            grid-template-columns: 1fr;
+        }
+        .info-panel {
+            position: relative;
+            top: 0;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="brand-header">
+            <svg class="brand-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#5b21b6;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path fill="url(#grad)" d="M60 50 L100 20 L140 50 L120 120 L80 120 Z"/>
+                <path fill="#ffffff" d="M70 80 L100 50 L130 80 L115 105 L85 105 Z"/>
+            </svg>
+            <div class="brand-name">VibeBuilt<span>Tech</span></div>
+            <div class="brand-url">vibebuilt.tech</div>
+        </div>
+
+```
+    <h1>🔥 Firebase Studio Vibe Coding Guide</h1>
+    <p class="subtitle">Master Google's Cloud IDE for Web App Development</p>
+    
+    <div class="map-container">
+        <div class="nodes-area">
+            <div class="node-group">
+                <div class="group-title">🎯 Firebase Studio Basics</div>
+                <div class="nodes">
+                    <div class="node studio" data-concept="firebase-studio">Firebase Studio Overview</div>
+                    <div class="node studio" data-concept="project-idx">From Project IDX</div>
+                    <div class="node studio" data-concept="cloud-ide">Cloud IDE Benefits</div>
+                    <div class="node studio" data-concept="vscode">VS Code Based</div>
+                </div>
+            </div>
+
+            <div class="node-group">
+                <div class="group-title">✨ Magic vs Code Mode</div>
+                <div class="nodes">
+                    <div class="node mode" data-concept="magic-mode">Magic Mode (AI)</div>
+                    <div class="node mode" data-concept="code-mode">Code Mode (Manual)</div>
+                    <div class="node mode" data-concept="hybrid">80/20 Hybrid Strategy</div>
+                </div>
+            </div>
+
+            <div class="node-group">
+                <div class="group-title">🤖 AI Features</div>
+                <div class="nodes">
+                    <div class="node ai" data-concept="gemini">Gemini AI Assistant</div>
+                    <div class="node ai" data-concept="completion">Code Completion</div>
+                    <div class="node ai" data-concept="generation">Code Generation</div>
+                    <div class="node ai" data-concept="debugging">AI Debugging</div>
+                </div>
+            </div>
+            
+            <div class="node-group">
+                <div class="group-title">🚀 Web Frameworks</div>
+                <div class="nodes">
+                    <div class="node framework" data-concept="react">React</div>
+                    <div class="node framework" data-concept="vue">Vue.js</div>
+                    <div class="node framework" data-concept="angular">Angular</div>
+                    <div class="node framework" data-concept="nextjs">Next.js</div>
+                    <div class="node framework" data-concept="svelte">Svelte</div>
+                </div>
+            </div>
+
+            <div class="node-group">
+                <div class="group-title">🔥 Firebase Services</div>
+                <div class="nodes">
+                    <div class="node firebase" data-concept="auto-setup">Auto Setup</div>
+                    <div class="node firebase" data-concept="auth">Authentication</div>
+                    <div class="node firebase" data-concept="firestore">Firestore Database</div>
+                    <div class="node firebase" data-concept="storage">Cloud Storage</div>
+                    <div class="node firebase" data-concept="hosting">Hosting</div>
+                    <div class="node firebase" data-concept="functions">Cloud Functions</div>
+                </div>
+            </div>
+
+            <div class="node-group">
+                <div class="group-title">🔑 Credentials & Security</div>
+                <div class="nodes">
+                    <div class="node admin" data-concept="admin-sdk">Admin SDK</div>
+                    <div class="node client" data-concept="client-sdk">Client SDK</div>
+                    <div class="node key" data-concept="private-key">Private Key</div>
+                    <div class="node key" data-concept="api-key">Public API Key</div>
+                    <div class="node security" data-concept="rules">Security Rules</div>
+                    <div class="node security" data-concept="gitignore">.gitignore</div>
+                </div>
+            </div>
+
+            <div class="node-group">
+                <div class="group-title">🚢 Deployment</div>
+                <div class="nodes">
+                    <div class="node feature" data-concept="deploy">One-Click Deploy</div>
+                    <div class="node feature" data-concept="github">GitHub Integration</div>
+                    <div class="node feature" data-concept="domain">Custom Domains</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-panel empty" id="infoPanel">
+            Click any concept to learn more
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div class="footer-brand">
+            <svg class="footer-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#5b21b6;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path fill="url(#grad2)" d="M60 50 L100 20 L140 50 L120 120 L80 120 Z"/>
+                <path fill="#ffffff" d="M70 80 L100 50 L130 80 L115 105 L85 105 Z"/>
+            </svg>
+            <div class="footer-text">
+                <div class="footer-name">VibeBuilt<span style="color: #5b21b6;">Tech</span></div>
+                <div class="footer-tagline">Building the future, one vibe at a time</div>
+            </div>
+        </div>
+        <div class="footer-links">
+            <strong>Web:</strong> <a href="https://vibebuilt.tech" target="_blank">vibebuilt.tech</a>
+        </div>
+        <div class="footer-copyright">
+            © 2025 VibeBuilt Tech. Specialized in Firebase Studio white-label web applications.
+        </div>
+    </div>
+</div>
+
+<script>
+    const concepts = {
+        'firebase-studio': {
+            title: 'Firebase Studio',
+            badge: { text: 'YOUR PLATFORM', type: 'warning' },
+            content: `
+                <h3>What is Firebase Studio?</h3>
+                <p><strong>Firebase Studio</strong> (formerly Project IDX) is Google's cloud-based IDE rebranded on April 15, 2025. It's designed for building web apps with deep Firebase integration.</p>
+                
+                <h3>Key Features:</h3>
+                <ul>
+                    <li><strong>Cloud-based:</strong> Code from any browser</li>
+                    <li><strong>VS Code powered:</strong> Familiar interface</li>
+                    <li><strong>AI-assisted:</strong> Gemini helps write code</li>
+                    <li><strong>Firebase native:</strong> Automatic setup</li>
+                    <li><strong>Multi-framework:</strong> React, Vue, Next.js, etc.</li>
+                </ul>
+                
+                <h3>Perfect For White-Labeling:</h3>
+                <ul>
+                    <li>Build client web apps 10x faster</li>
+                    <li>AI handles repetitive code</li>
+                    <li>Firebase backend integrated</li>
+                    <li>Deploy directly to Firebase Hosting</li>
+                    <li>Work from anywhere</li>
+                </ul>
+            `
+        },
+        'project-idx': {
+            title: 'From Project IDX',
+            badge: { text: 'History', type: 'info' },
+            content: `
+                <h3>The Rebrand</h3>
+                <p>Project IDX was Google's experimental cloud IDE. On April 15, 2025, it became <strong>Firebase Studio</strong>.</p>
+                
+                <h3>What Changed:</h3>
+                <ul>
+                    <li>Name: Project IDX → Firebase Studio</li>
+                    <li>Deeper Firebase integration</li>
+                    <li>Official Firebase ecosystem</li>
+                </ul>
+                
+                <h3>What Stayed:</h3>
+                <ul>
+                    <li>Cloud IDE functionality</li>
+                    <li>VS Code interface</li>
+                    <li>AI assistance</li>
+                    <li>Framework support</li>
+                </ul>
+            `
+        },
+        'cloud-ide': {
+            title: 'Cloud IDE Benefits',
+            badge: { text: 'Advantages', type: 'safe' },
+            content: `
+                <h3>Why Cloud IDE?</h3>
+                <p>Develop in your browser without local setup.</p>
+                
+                <h3>Benefits:</h3>
+                <ul>
+                    <li><strong>No setup:</strong> Start coding immediately</li>
+                    <li><strong>Work anywhere:</strong> Any device with browser</li>
+                    <li><strong>Consistent:</strong> Same environment always</li>
+                    <li><strong>Powerful:</strong> Google's servers</li>
+                    <li><strong>Collaboration:</strong> Share with a link</li>
+                </ul>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>Switch projects easily</li>
+                    <li>No "works on my machine" issues</li>
+                    <li>Demo to clients instantly</li>
+                </ul>
+            `
+        },
+        'vscode': {
+            title: 'VS Code Based',
+            badge: { text: 'Familiar', type: 'safe' },
+            content: `
+                <h3>Built on VS Code</h3>
+                <p>Firebase Studio uses Visual Studio Code interface - if you know VS Code, you know Firebase Studio.</p>
+                
+                <h3>Familiar Features:</h3>
+                <ul>
+                    <li>Same keyboard shortcuts</li>
+                    <li>Same file explorer</li>
+                    <li>Same command palette</li>
+                    <li>Extensions support</li>
+                </ul>
+                
+                <h3>Bonus Features:</h3>
+                <ul>
+                    <li>AI coding assistant (Gemini)</li>
+                    <li>One-click Firebase setup</li>
+                    <li>Live preview pane</li>
+                    <li>Instant deployment</li>
+                </ul>
+            `
+        },
+        'magic-mode': {
+            title: 'Magic Mode',
+            badge: { text: 'AI-POWERED', type: 'safe' },
+            content: `
+                <h3>AI-Assisted Development</h3>
+                <p>Magic Mode is where Gemini AI helps you write code through natural language.</p>
+                
+                <h3>How It Works:</h3>
+                <ul>
+                    <li>Describe what you want</li>
+                    <li>AI generates code</li>
+                    <li>Review and accept</li>
+                    <li>Keep building</li>
+                </ul>
+                
+                <h3>Example Requests:</h3>
+                <ul>
+                    <li>"Create a login form with Firebase auth"</li>
+                    <li>"Build a product card component"</li>
+                    <li>"Add Firestore query for posts"</li>
+                    <li>"Style this navbar responsive"</li>
+                </ul>
+                
+                <h3>When to Use:</h3>
+                <ul>
+                    <li>Standard components</li>
+                    <li>Firebase integration</li>
+                    <li>Boilerplate code</li>
+                    <li>Quick prototyping</li>
+                </ul>
+            `
+        },
+        'code-mode': {
+            title: 'Code Mode',
+            badge: { text: 'Manual', type: 'warning' },
+            content: `
+                <h3>Traditional Coding</h3>
+                <p>Code Mode is writing every line yourself for full control.</p>
+                
+                <h3>When to Use:</h3>
+                <ul>
+                    <li>Complex business logic</li>
+                    <li>Performance optimization</li>
+                    <li>Custom integrations</li>
+                    <li>Debugging AI code</li>
+                    <li>Client-specific features</li>
+                </ul>
+                
+                <h3>Skills Needed:</h3>
+                <ul>
+                    <li>JavaScript/TypeScript</li>
+                    <li>Your framework (React, Vue, etc.)</li>
+                    <li>Firebase SDK</li>
+                    <li>HTML/CSS</li>
+                </ul>
+            `
+        },
+        'hybrid': {
+            title: '80/20 Strategy',
+            badge: { text: 'YOUR APPROACH', type: 'safe' },
+            content: `
+                <h3>Best of Both Worlds</h3>
+                <p>Your strategy: Magic Mode (80%) + Code Mode (20%)</p>
+                
+                <h3>Why This Works:</h3>
+                <ul>
+                    <li><strong>Speed:</strong> AI handles boilerplate</li>
+                    <li><strong>Quality:</strong> You perfect the details</li>
+                    <li><strong>Customization:</strong> Client-specific in Code Mode</li>
+                    <li><strong>Scalability:</strong> Take on more clients</li>
+                </ul>
+                
+                <h3>Typical Workflow:</h3>
+                <ul>
+                    <li>Magic: "Create login page"</li>
+                    <li>Code: Customize branding</li>
+                    <li>Magic: "Build dashboard"</li>
+                    <li>Code: Add custom metrics</li>
+                </ul>
+            `
+        },
+        'gemini': {
+            title: 'Gemini AI',
+            badge: { text: 'AI Assistant', type: 'info' },
+            content: `
+                <h3>Google's AI in Your IDE</h3>
+                <p>Gemini is your coding partner that understands Firebase and web frameworks.</p>
+                
+                <h3>What Gemini Does:</h3>
+                <ul>
+                    <li>Generates complete components</li>
+                    <li>Explains code</li>
+                    <li>Fixes bugs</li>
+                    <li>Refactors code</li>
+                    <li>Writes tests</li>
+                </ul>
+                
+                <h3>Firebase Knowledge:</h3>
+                <ul>
+                    <li>Correct Firebase SDK usage</li>
+                    <li>Proper Authentication flows</li>
+                    <li>Firestore best practices</li>
+                    <li>Security Rules generation</li>
+                </ul>
+            `
+        },
+        'completion': {
+            title: 'Smart Completion',
+            badge: { text: 'Productivity', type: 'safe' },
+            content: `
+                <h3>AI Autocomplete</h3>
+                <p>As you type, AI predicts and suggests complete code.</p>
+                
+                <h3>Features:</h3>
+                <ul>
+                    <li>Context-aware suggestions</li>
+                    <li>Framework-specific</li>
+                    <li>Firebase-aware</li>
+                    <li>Error-preventing</li>
+                </ul>
+                
+                <h3>Time Saved:</h3>
+                <ul>
+                    <li>Less typing</li>
+                    <li>Fewer typos</li>
+                    <li>Better patterns</li>
+                </ul>
+            `
+        },
+        'generation': {
+            title: 'Code Generation',
+            badge: { text: 'Automation', type: 'info' },
+            content: `
+                <h3>Generate Entire Features</h3>
+                <p>Ask Gemini to create complete pages, components, and logic.</p>
+                
+                <h3>What to Generate:</h3>
+                <ul>
+                    <li>Complete pages</li>
+                    <li>React/Vue components</li>
+                    <li>Firebase CRUD operations</li>
+                    <li>Forms with validation</li>
+                    <li>API endpoints</li>
+                </ul>
+                
+                <h3>Best Prompts:</h3>
+                <ul>
+                    <li>Be specific: "React component"</li>
+                    <li>Mention framework: "in Next.js"</li>
+                    <li>Include Firebase: "fetch from Firestore"</li>
+                    <li>Specify styling: "using Tailwind"</li>
+                </ul>
+            `
+        },
+        'debugging': {
+            title: 'AI Debugging',
+            badge: { text: 'Problem Solving', type: 'info' },
+            content: `
+                <h3>Let AI Fix Bugs</h3>
+                <p>Gemini identifies issues and suggests fixes.</p>
+                
+                <h3>What AI Can Fix:</h3>
+                <ul>
+                    <li>Syntax errors</li>
+                    <li>Logic errors</li>
+                    <li>Firebase permission issues</li>
+                    <li>API problems</li>
+                    <li>Performance issues</li>
+                </ul>
+                
+                <h3>How to Use:</h3>
+                <ul>
+                    <li>Copy error message</li>
+                    <li>Describe the problem</li>
+                    <li>Show the code</li>
+                    <li>Get solution</li>
+                </ul>
+            `
+        },
+        'react': {
+            title: 'React',
+            badge: { text: 'Framework', type: 'info' },
+            content: `
+                <h3>Build with React</h3>
+                <p>Facebook's popular library for building UIs.</p>
+                
+                <h3>Why React:</h3>
+                <ul>
+                    <li>Most popular framework</li>
+                    <li>Component-based</li>
+                    <li>Rich ecosystem</li>
+                    <li>Great Firebase integration</li>
+                </ul>
+                
+                <h3>Perfect For:</h3>
+                <ul>
+                    <li>Single-page apps</li>
+                    <li>Admin dashboards</li>
+                    <li>SaaS products</li>
+                </ul>
+            `
+        },
+        'vue': {
+            title: 'Vue.js',
+            badge: { text: 'Framework', type: 'info' },
+            content: `
+                <h3>Build with Vue</h3>
+                <p>Progressive framework, easier learning curve than React.</p>
+                
+                <h3>Why Vue:</h3>
+                <ul>
+                    <li>Easier to learn</li>
+                    <li>Great documentation</li>
+                    <li>Flexible and fast</li>
+                </ul>
+                
+                <h3>Good For:</h3>
+                <ul>
+                    <li>Startups</li>
+                    <li>New framework learners</li>
+                    <li>Progressive web apps</li>
+                </ul>
+            `
+        },
+        'angular': {
+            title: 'Angular',
+            badge: { text: 'Framework', type: 'info' },
+            content: `
+                <h3>Build with Angular</h3>
+                <p>Google's full-featured enterprise framework.</p>
+                
+                <h3>Why Angular:</h3>
+                <ul>
+                    <li>Enterprise-ready</li>
+                    <li>TypeScript-first</li>
+                    <li>Opinionated structure</li>
+                    <li>Google-backed</li>
+                </ul>
+                
+                <h3>Best For:</h3>
+                <ul>
+                    <li>Enterprise clients</li>
+                    <li>Large applications</li>
+                    <li>Teams preferring structure</li>
+                </ul>
+            `
+        },
+        'nextjs': {
+            title: 'Next.js',
+            badge: { text: 'Framework', type: 'info' },
+            content: `
+                <h3>Build with Next.js</h3>
+                <p>React framework with SSR, great SEO, excellent performance.</p>
+                
+                <h3>Why Next.js:</h3>
+                <ul>
+                    <li>SEO-friendly (SSR)</li>
+                    <li>Fast performance</li>
+                    <li>API routes built-in</li>
+                    <li>Image optimization</li>
+                    <li>Production-ready</li>
+                </ul>
+                
+                <h3>Perfect For:</h3>
+                <ul>
+                    <li>Marketing sites (need SEO)</li>
+                    <li>E-commerce</li>
+                    <li>Content sites</li>
+                    <li>Professional projects</li>
+                </ul>
+            `
+        },
+        'svelte': {
+            title: 'Svelte',
+            badge: { text: 'Framework', type: 'info' },
+            content: `
+                <h3>Build with Svelte</h3>
+                <p>Modern framework that compiles to vanilla JavaScript.</p>
+                
+                <h3>Why Svelte:</h3>
+                <ul>
+                    <li>Fastest performance</li>
+                    <li>Less boilerplate</li>
+                    <li>Smaller bundles</li>
+                    <li>Modern patterns</li>
+                </ul>
+                
+                <h3>Good For:</h3>
+                <ul>
+                    <li>Performance-critical apps</li>
+                    <li>Simpler codebases</li>
+                    <li>Small to medium projects</li>
+                </ul>
+            `
+        },
+        'auto-setup': {
+            title: 'Automatic Firebase Setup',
+            badge: { text: 'Time Saver', type: 'safe' },
+            content: `
+                <h3>One-Click Firebase</h3>
+                <p>Firebase Studio auto-configures Firebase - no manual setup!</p>
+                
+                <h3>What Gets Configured:</h3>
+                <ul>
+                    <li>Firebase SDK installed</li>
+                    <li>Config object with API keys</li>
+                    <li>Initialization code</li>
+                    <li>Environment variables</li>
+                    <li>Service connections ready</li>
+                </ul>
+                
+                <h3>Traditional vs Studio:</h3>
+                <p><strong>Traditional:</strong> 30+ minutes of manual setup</p>
+                <p><strong>Firebase Studio:</strong> Click "Add Firebase" - Done in 30 seconds!</p>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>New client? Add Firebase instantly</li>
+                    <li>Switch projects easily</li>
+                    <li>No configuration errors</li>
+                </ul>
+            `
+        },
+        'auth': {
+            title: 'Firebase Authentication',
+            badge: { text: 'User Login', type: 'info' },
+            content: `
+                <h3>User Authentication</h3>
+                <p>Add secure login/signup with Firebase Auth.</p>
+                
+                <h3>Supported Methods:</h3>
+                <ul>
+                    <li>Email/Password</li>
+                    <li>Google Sign-In</li>
+                    <li>Facebook, Twitter, GitHub</li>
+                    <li>Phone Auth (SMS)</li>
+                    <li>Anonymous</li>
+                </ul>
+                
+                <h3>In Firebase Studio:</h3>
+                <ul>
+                    <li>AI generates auth flows</li>
+                    <li>Ask: "Add email/password auth"</li>
+                    <li>Creates login/signup pages</li>
+                    <li>Handles state automatically</li>
+                </ul>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>Every client needs auth</li>
+                    <li>Customize branding per client</li>
+                    <li>Firebase handles security</li>
+                </ul>
+            `
+        },
+        'firestore': {
+            title: 'Firestore Database',
+            badge: { text: 'Data Storage', type: 'info' },
+            content: `
+                <h3>Cloud Database</h3>
+                <p>Firestore is Firebase's NoSQL database - perfect for web apps.</p>
+                
+                <h3>Key Features:</h3>
+                <ul>
+                    <li>Real-time sync</li>
+                    <li>Offline support</li>
+                    <li>Scalable to millions</li>
+                    <li>Flexible queries</li>
+                    <li>Security Rules protection</li>
+                </ul>
+                
+                <h3>Data Structure:</h3>
+                <ul>
+                    <li><strong>Collections:</strong> Like tables (users, posts)</li>
+                    <li><strong>Documents:</strong> Individual records</li>
+                    <li><strong>Fields:</strong> Data inside documents</li>
+                </ul>
+                
+                <h3>AI Code Generation:</h3>
+                <ul>
+                    <li>"Fetch all posts from Firestore"</li>
+                    <li>"Create new user document"</li>
+                    <li>"Update post where id matches"</li>
+                    <li>"Delete from users collection"</li>
+                </ul>
+            `
+        },
+        'storage': {
+            title: 'Cloud Storage',
+            badge: { text: 'File Uploads', type: 'info' },
+            content: `
+                <h3>File Storage</h3>
+                <p>Firebase Storage handles user-uploaded files.</p>
+                
+                <h3>What to Store:</h3>
+                <ul>
+                    <li>Profile photos</li>
+                    <li>Product images</li>
+                    <li>Videos</li>
+                    <li>PDFs and documents</li>
+                    <li>Any files up to 5TB</li>
+                </ul>
+                
+                <h3>Features:</h3>
+                <ul>
+                    <li>Secure (Storage Rules)</li>
+                    <li>Fast (Google CDN)</li>
+                    <li>Resumable uploads</li>
+                    <li>Auto-scaling</li>
+                </ul>
+                
+                <h3>Typical Flow:</h3>
+                <ul>
+                    <li>User selects file</li>
+                    <li>Upload to Storage</li>
+                    <li>Get download URL</li>
+                    <li>Save URL to Firestore</li>
+                    <li>Display file</li>
+                </ul>
+            `
+        },
+        'hosting': {
+            title: 'Firebase Hosting',
+            badge: { text: 'Deployment', type: 'safe' },
+            content: `
+                <h3>Deploy Your Apps</h3>
+                <p>Fast, secure hosting with global CDN.</p>
+                
+                <h3>Features:</h3>
+                <ul>
+                    <li>Free SSL (automatic HTTPS)</li>
+                    <li>Global CDN</li>
+                    <li>Custom domains</li>
+                    <li>Rollback support</li>
+                    <li>Preview URLs</li>
+                </ul>
+                
+                <h3>From Firebase Studio:</h3>
+                <ul>
+                    <li>One-click deploy</li>
+                    <li>Automatic build</li>
+                    <li>Get live URL instantly</li>
+                </ul>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>Each client gets own project</li>
+                    <li>Deploy to client domains</li>
+                    <li>Easy updates</li>
+                </ul>
+            `
+        },
+        'functions': {
+            title: 'Cloud Functions',
+            badge: { text: 'Backend Logic', type: 'warning' },
+            content: `
+                <h3>Serverless Backend</h3>
+                <p>Run backend code without managing servers.</p>
+                
+                <h3>Use Cases:</h3>
+                <ul>
+                    <li>Database triggers</li>
+                    <li>Auth triggers (welcome emails)</li>
+                    <li>HTTP endpoints (APIs)</li>
+                    <li>Scheduled tasks (cron)</li>
+                    <li>Image processing</li>
+                </ul>
+                
+                <h3>In Firebase Studio:</h3>
+                <ul>
+                    <li>Write functions in same project</li>
+                    <li>AI generates function code</li>
+                    <li>Deploy from Studio</li>
+                    <li>Test locally first</li>
+                </ul>
+                
+                <h3>When Needed:</h3>
+                <ul>
+                    <li>Server-side operations</li>
+                    <li>Sending emails</li>
+                    <li>Processing payments</li>
+                    <li>Third-party integrations</li>
+                </ul>
+            `
+        },
+        'admin-sdk': {
+            title: 'Admin SDK',
+            badge: { text: 'SERVER ONLY', type: 'danger' },
+            content: `
+                <h3>Admin SDK</h3>
+                <p>Server-side Firebase with full access. Use ONLY in Cloud Functions, NEVER in web apps.</p>
+                
+                <h3>⚠️ Critical Rules:</h3>
+                <ul>
+                    <li><strong>Server-only:</strong> Cloud Functions only</li>
+                    <li><strong>Full access:</strong> Can read/write ANY data</li>
+                    <li><strong>Bypasses Security Rules</strong></li>
+                    <li><strong>Requires private key</strong></li>
+                    <li><strong>NEVER in client code</strong></li>
+                </ul>
+                
+                <h3>When Needed:</h3>
+                <ul>
+                    <li>Cloud Functions backend logic</li>
+                    <li>Admin operations</li>
+                    <li>Batch updates</li>
+                    <li>Server-side email</li>
+                </ul>
+                
+                <h3>For Web Apps:</h3>
+                <p>Most web apps DON'T need this! Use Client SDK instead.</p>
+            `
+        },
+        'client-sdk': {
+            title: 'Client SDK',
+            badge: { text: 'WEB APPS', type: 'safe' },
+            content: `
+                <h3>Client SDK</h3>
+                <p>This is what you use in web apps. Safe for browsers, respects Security Rules.</p>
+                
+                <h3>✅ Safe for Web:</h3>
+                <ul>
+                    <li>User-level access only</li>
+                    <li>Security Rules enforced</li>
+                    <li>Public credentials OK</li>
+                    <li>Browser-safe</li>
+                </ul>
+                
+                <h3>What You Build:</h3>
+                <ul>
+                    <li>User authentication</li>
+                    <li>Reading user data</li>
+                    <li>Writing data (within rules)</li>
+                    <li>Uploading files</li>
+                    <li>Real-time listeners</li>
+                </ul>
+                
+                <h3>In Firebase Studio:</h3>
+                <ul>
+                    <li>Auto-configured</li>
+                    <li>AI generates Client SDK code</li>
+                    <li>99% of your code uses this</li>
+                </ul>
+            `
+        },
+        'private-key': {
+            title: 'Private Key',
+            badge: { text: 'HIGHLY SENSITIVE', type: 'danger' },
+            content: `
+                <h3>Service Account Private Key</h3>
+                <p>Most sensitive credential. Only for Admin SDK in Cloud Functions.</p>
+                
+                <h3>🚨 Security Rules:</h3>
+                <ul>
+                    <li><strong>NEVER in web apps</strong></li>
+                    <li><strong>NEVER commit to Git</strong></li>
+                    <li><strong>NEVER expose publicly</strong></li>
+                    <li><strong>Only in Cloud Functions</strong></li>
+                </ul>
+                
+                <h3>For Most Projects:</h3>
+                <p>You DON'T need this! Firebase Studio handles client auth automatically.</p>
+            `
+        },
+        'api-key': {
+            title: 'Public API Key',
+            badge: { text: 'SAFE TO EXPOSE', type: 'safe' },
+            content: `
+                <h3>Firebase Public API Key</h3>
+                <p>Despite the name, this is PUBLIC and SAFE in your code!</p>
+                
+                <h3>Common Misconception:</h3>
+                <p>⚠️ Don't worry about exposing this - it's designed to be public!</p>
+                
+                <h3>Why It's Safe:</h3>
+                <ul>
+                    <li>Only identifies your project</li>
+                    <li>Doesn't grant permissions</li>
+                    <li>Security comes from Rules</li>
+                    <li>Firebase expects this in client code</li>
+                </ul>
+                
+                <h3>Real Security:</h3>
+                <ul>
+                    <li>Firebase Security Rules</li>
+                    <li>Authentication</li>
+                    <li>Backend validation</li>
+                    <li>NOT hiding the API key</li>
+                </ul>
+            `
+        },
+        'rules': {
+            title: 'Security Rules',
+            badge: { text: 'CRITICAL', type: 'danger' },
+            content: `
+                <h3>Security Rules</h3>
+                <p>Protect your Firestore and Storage data. Server-side enforced.</p>
+                
+                <h3>Why Critical:</h3>
+                <ul>
+                    <li>Client SDK respects these</li>
+                    <li>Prevents unauthorized access</li>
+                    <li>Your main security defense</li>
+                    <li>Bad rules = anyone can access data</li>
+                </ul>
+                
+                <h3>Common Patterns:</h3>
+                <ul>
+                    <li><strong>Auth only:</strong> <code>if request.auth != null</code></li>
+                    <li><strong>Owner only:</strong> <code>if request.auth.uid == userId</code></li>
+                    <li><strong>Public read, auth write</strong></li>
+                </ul>
+                
+                <h3>Example:</h3>
+                <p><code>match /users/{userId} {<br>
+                &nbsp;&nbsp;allow read: if request.auth != null;<br>
+                &nbsp;&nbsp;allow write: if request.auth.uid == userId;<br>
+                }</code></p>
+                
+                <h3>⚠️ Never Use:</h3>
+                <p><code>allow read, write: if true;</code> - Allows ANYONE to access ALL data!</p>
+            `
+        },
+        'gitignore': {
+            title: '.gitignore',
+            badge: { text: 'Critical', type: 'danger' },
+            content: `
+                <h3>Protect Secrets</h3>
+                <p>.gitignore tells Git which files NOT to track.</p>
+                
+                <h3>Why Critical:</h3>
+                <p>If you commit secrets to Git, anyone can access your entire database and rack up huge bills.</p>
+                
+                <h3>Essential .gitignore:</h3>
+                <p><code>.env<br>
+                .env.local<br>
+                serviceAccountKey.json<br>
+                firebase-adminsdk-*.json<br>
+                node_modules/<br>
+                dist/<br>
+                build/</code></p>
+                
+                <h3>In Firebase Studio:</h3>
+                <ul>
+                    <li>Often created automatically</li>
+                    <li>Always verify it includes .env</li>
+                    <li>Add client-specific secrets</li>
+                </ul>
+                
+                <h3>🚨 If You Committed Secrets:</h3>
+                <ul>
+                    <li>Rotate keys in Firebase Console NOW</li>
+                    <li>Remove from Git history</li>
+                    <li>Or delete repo and start fresh</li>
+                </ul>
+            `
+        },
+        'deploy': {
+            title: 'One-Click Deploy',
+            badge: { text: 'Go Live', type: 'safe' },
+            content: `
+                <h3>Deploy to Firebase Hosting</h3>
+                <p>Just click a button!</p>
+                
+                <h3>How It Works:</h3>
+                <ul>
+                    <li>Click "Deploy"</li>
+                    <li>Studio builds your app</li>
+                    <li>Uploads to Firebase Hosting</li>
+                    <li>Get live URL instantly</li>
+                </ul>
+                
+                <h3>What You Get:</h3>
+                <ul>
+                    <li>Live URL: yourapp.web.app</li>
+                    <li>Free SSL (HTTPS)</li>
+                    <li>Global CDN</li>
+                    <li>Instant updates</li>
+                </ul>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>Deploy to client's Firebase project</li>
+                    <li>Use client's custom domain</li>
+                    <li>Quick iterations</li>
+                    <li>Rollback if needed</li>
+                </ul>
+            `
+        },
+        'github': {
+            title: 'GitHub Integration',
+            badge: { text: 'Version Control', type: 'safe' },
+            content: `
+                <h3>Connect to GitHub</h3>
+                <p>Sync projects with GitHub for version control.</p>
+                
+                <h3>Benefits:</h3>
+                <ul>
+                    <li>Version history</li>
+                    <li>Team collaboration</li>
+                    <li>Code backup</li>
+                    <li>CI/CD integration</li>
+                    <li>Code reviews</li>
+                </ul>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>One repo per client</li>
+                    <li>Keep code organized</li>
+                    <li>Deliver via GitHub</li>
+                    <li>Private repos for clients</li>
+                </ul>
+                
+                <h3>Setup:</h3>
+                <ul>
+                    <li>Studio settings → GitHub</li>
+                    <li>Connect account</li>
+                    <li>Select/create repo</li>
+                    <li>Enable auto-sync</li>
+                </ul>
+            `
+        },
+        'domain': {
+            title: 'Custom Domains',
+            badge: { text: 'Professional', type: 'safe' },
+            content: `
+                <h3>Use Client Domains</h3>
+                <p>Replace yourapp.web.app with professional client.com</p>
+                
+                <h3>Setup:</h3>
+                <ul>
+                    <li>Client buys domain</li>
+                    <li>Firebase Console: Add custom domain</li>
+                    <li>Update DNS records</li>
+                    <li>Wait for SSL (automatic)</li>
+                    <li>Live in 24-48 hours</li>
+                </ul>
+                
+                <h3>What Firebase Provides:</h3>
+                <ul>
+                    <li>Free SSL certificate</li>
+                    <li>Automatic HTTPS</li>
+                    <li>Global CDN</li>
+                    <li>Fast performance</li>
+                </ul>
+                
+                <h3>For White-Label:</h3>
+                <ul>
+                    <li>Each client uses own domain</li>
+                    <li>Professional branding</li>
+                    <li>No "powered by" branding</li>
+                    <li>Full control</li>
+                </ul>
+            `
+        }
+    };
+
+    const nodes = document.querySelectorAll('.node');
+    const infoPanel = document.getElementById('infoPanel');
+
+    nodes.forEach(node => {
+        node.addEventListener('click', () => {
+            const concept = node.dataset.concept;
+            const data = concepts[concept];
+            
+            if (data) {
+                nodes.forEach(n => n.classList.remove('active'));
+                node.classList.add('active');
+                
+                infoPanel.classList.remove('empty');
+                infoPanel.innerHTML = `
+                    <div class="badge ${data.badge.type}">${data.badge.text}</div>
+                    <div class="info-title">${data.title}</div>
+                    <div class="info-content">${data.content}</div>
+                `;
+            }
+        });
+    });
+</script>
+```
+
+</body>
+</html>
